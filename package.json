@@ -7,11 +7,6 @@
   "author": "mbaharip",
   "license": "MIT",
   "private": false,
-  "scripts": {
-    "start": "node dist/main.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/main.js\"",
-    "lint": "eslint ./src --ext .ts"
-  },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
