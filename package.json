@@ -9,7 +9,7 @@
   "private": false,
   "scripts": {
     "build": "tsc",
-    "start": "node dist/main.js",
+    "start": "nodemon -q dist/main.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/main.js\"",
     "lint": "eslint ./src --ext .ts"
   },
