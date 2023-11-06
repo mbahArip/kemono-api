@@ -5,7 +5,7 @@ on:
     - cron: "0 0 * * *" # Every day at midnight UTC
   push:
     branches:
-      - master
+      - main
   workflow_dispatch:
 
 jobs:
