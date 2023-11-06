@@ -1,23 +1,23 @@
-import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
+import express, { Express, Request, Response } from "express";
 
 dotenv.config();
 
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 
-import { ServiceKemono, ServiceCoomer, Service } from "./types/data";
-import {
-  getAll as kemono_getAll,
-  getById as kemono_getById,
-  getByService as kemono_getByService,
-} from "./services/kemono";
 import {
   getAll as coomer_getAll,
   getById as coomer_getById,
   getByService as coomer_getByService,
 } from "./services/coomer";
+import {
+  getAll as kemono_getAll,
+  getById as kemono_getById,
+  getByService as kemono_getByService,
+} from "./services/kemono";
 import { checkId, search } from "./services/search";
+import { Service, ServiceCoomer, ServiceKemono } from "./types/data";
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
@@ -29,6 +29,7 @@ const limiter = rateLimit({
   legacyHeaders: true,
 });
 
+app.use("/static", express.static("static"));
 app.use(cors());
 app.use(limiter);
 app.use((req: Request, res: Response, next) => {
@@ -61,7 +62,7 @@ const validKemonoProviders = [
 
 const validCoomerProviders = ["onlyfans", "fansly"];
 
-app.get("/kemono", (req: Request, res: Response) => {
+app.get("/kemono", async (req: Request, res: Response) => {
   const { itemsPerPage, page, keyword } = req.query;
   try {
     const queryData = {
@@ -69,7 +70,7 @@ app.get("/kemono", (req: Request, res: Response) => {
       page: page ? Number(page as string) : undefined,
       keyword: (keyword as string) ?? undefined,
     };
-    const data = kemono_getAll(
+    const data = await kemono_getAll(
       queryData.keyword,
       queryData.page,
       queryData.itemsPerPage
@@ -81,7 +82,15 @@ app.get("/kemono", (req: Request, res: Response) => {
       currentPage: queryData.page,
       itemsPerPage: queryData.itemsPerPage,
       keyword: queryData.keyword,
-      data: data,
+      data: data.data,
+      pagination: {
+        currentPage: queryData.page ?? 1,
+        itemsPerPage: queryData.itemsPerPage ?? 10,
+        totalPages: Math.ceil(data.length / (queryData.itemsPerPage ?? 10)),
+        totalItems: data.length,
+        isNextPage: data.length > (queryData.itemsPerPage ?? 10),
+        isPrevPage: queryData.page ? queryData.page > 1 : false,
+      },
     });
   } catch (error: any) {
     return res.status(error.code).json({
@@ -91,7 +100,7 @@ app.get("/kemono", (req: Request, res: Response) => {
   }
 });
 
-app.get("/kemono/:provider", (req: Request, res: Response) => {
+app.get("/kemono/:provider", async (req: Request, res: Response) => {
   const { provider } = req.params;
   const { itemsPerPage, page, keyword } = req.query;
 
@@ -109,7 +118,7 @@ app.get("/kemono/:provider", (req: Request, res: Response) => {
       page: page ? Number(page as string) : undefined,
       keyword: (keyword as string) ?? undefined,
     };
-    const data = kemono_getByService(
+    const data = await kemono_getByService(
       provider as ServiceKemono,
       queryData.keyword,
       queryData.page,
@@ -122,7 +131,15 @@ app.get("/kemono/:provider", (req: Request, res: Response) => {
       currentPage: page,
       itemsPerPage: itemsPerPage,
       keyword: keyword,
-      data: data,
+      data: data.data,
+      pagination: {
+        currentPage: queryData.page ?? 1,
+        itemsPerPage: queryData.itemsPerPage ?? 10,
+        totalPages: Math.ceil(data.length / (queryData.itemsPerPage ?? 10)),
+        totalItems: data.length,
+        isNextPage: data.length > (queryData.itemsPerPage ?? 10),
+        isPrevPage: queryData.page ? queryData.page > 1 : false,
+      },
     });
   } catch (error: any) {
     return res.json({
@@ -132,7 +149,7 @@ app.get("/kemono/:provider", (req: Request, res: Response) => {
   }
 });
 
-app.get("/kemono/:provider/:id", (req: Request, res: Response) => {
+app.get("/kemono/:provider/:id", async (req: Request, res: Response) => {
   const { id, provider } = req.params;
 
   try {
@@ -143,7 +160,7 @@ app.get("/kemono/:provider/:id", (req: Request, res: Response) => {
         availableProviders: validKemonoProviders,
       });
     }
-    const data = kemono_getById(id, provider as ServiceKemono);
+    const data = await kemono_getById(id, provider as ServiceKemono);
     if (!data) {
       return res.status(404).json({
         message: "Not found",
@@ -164,7 +181,7 @@ app.get("/kemono/:provider/:id", (req: Request, res: Response) => {
   }
 });
 
-app.get("/coomer", (req: Request, res: Response) => {
+app.get("/coomer", async (req: Request, res: Response) => {
   const { itemsPerPage, page, keyword } = req.query;
   try {
     const queryData = {
@@ -172,7 +189,7 @@ app.get("/coomer", (req: Request, res: Response) => {
       page: page ? Number(page as string) : undefined,
       keyword: (keyword as string) ?? undefined,
     };
-    const data = coomer_getAll(
+    const data = await coomer_getAll(
       queryData.keyword,
       queryData.page,
       queryData.itemsPerPage
@@ -184,7 +201,15 @@ app.get("/coomer", (req: Request, res: Response) => {
       currentPage: queryData.page,
       itemsPerPage: queryData.itemsPerPage,
       keyword: queryData.keyword,
-      data: data,
+      data: data.data,
+      pagination: {
+        currentPage: queryData.page ?? 1,
+        itemsPerPage: queryData.itemsPerPage ?? 10,
+        totalPages: Math.ceil(data.length / (queryData.itemsPerPage ?? 10)),
+        totalItems: data.length,
+        isNextPage: data.length > (queryData.itemsPerPage ?? 10),
+        isPrevPage: queryData.page ? queryData.page > 1 : false,
+      },
     });
   } catch (error: any) {
     return res.status(error.code).json({
@@ -194,7 +219,7 @@ app.get("/coomer", (req: Request, res: Response) => {
   }
 });
 
-app.get("/coomer/:provider", (req: Request, res: Response) => {
+app.get("/coomer/:provider", async (req: Request, res: Response) => {
   const { provider } = req.params;
   const { itemsPerPage, page, keyword } = req.query;
 
@@ -212,7 +237,7 @@ app.get("/coomer/:provider", (req: Request, res: Response) => {
       page: page ? Number(page as string) : undefined,
       keyword: (keyword as string) ?? undefined,
     };
-    const data = coomer_getByService(
+    const data = await coomer_getByService(
       provider as ServiceCoomer,
       queryData.keyword,
       queryData.page,
@@ -225,7 +250,15 @@ app.get("/coomer/:provider", (req: Request, res: Response) => {
       currentPage: page,
       itemsPerPage: itemsPerPage,
       keyword: keyword,
-      data: data,
+      data: data.data,
+      pagination: {
+        currentPage: queryData.page ?? 1,
+        itemsPerPage: queryData.itemsPerPage ?? 10,
+        totalPages: Math.ceil(data.length / (queryData.itemsPerPage ?? 10)),
+        totalItems: data.length,
+        isNextPage: data.length > (queryData.itemsPerPage ?? 10),
+        isPrevPage: queryData.page ? queryData.page > 1 : false,
+      },
     });
   } catch (error: any) {
     return res.json({
@@ -235,7 +268,7 @@ app.get("/coomer/:provider", (req: Request, res: Response) => {
   }
 });
 
-app.get("/coomer/:provider/:id", (req: Request, res: Response) => {
+app.get("/coomer/:provider/:id", async (req: Request, res: Response) => {
   const { id, provider } = req.params;
 
   try {
@@ -246,7 +279,7 @@ app.get("/coomer/:provider/:id", (req: Request, res: Response) => {
         availableProviders: validCoomerProviders,
       });
     }
-    const data = coomer_getById(id, provider as ServiceCoomer);
+    const data = await coomer_getById(id, provider as ServiceCoomer);
     if (!data) {
       return res.status(404).json({
         message: "Not found",
@@ -267,11 +300,11 @@ app.get("/coomer/:provider/:id", (req: Request, res: Response) => {
   }
 });
 
-app.get("/search/:id", (req: Request, res: Response) => {
-  const { id } = req.params;
+app.get("/search/:keyword", async (req: Request, res: Response) => {
+  const { keyword } = req.params;
 
   try {
-    const data = search(id as string);
+    const data = await search(keyword as string);
     if (!data) {
       return res.status(404).json({
         message: "Not found",
@@ -283,7 +316,7 @@ app.get("/search/:id", (req: Request, res: Response) => {
       message: "OK",
       timestamp: Date.now(),
       length: data.length,
-      data: data,
+      data: data.data,
     });
   } catch (error: any) {
     return res.json({
@@ -293,14 +326,13 @@ app.get("/search/:id", (req: Request, res: Response) => {
   }
 });
 
-app.get("/check/:provider/:id", (req: Request, res: Response) => {
+app.get("/check/:provider/:id", async (req: Request, res: Response) => {
   const { id, provider } = req.params;
 
   try {
     if (
       !validKemonoProviders.includes(provider.toLowerCase()) &&
-      !validCoomerProviders.includes(provider.toLowerCase()) &&
-      !validKemonoProviders.includes(provider.toLowerCase())
+      !validCoomerProviders.includes(provider.toLowerCase())
     ) {
       return res.status(400).json({
         message: "Invalid provider",
@@ -309,7 +341,7 @@ app.get("/check/:provider/:id", (req: Request, res: Response) => {
       });
     }
 
-    const data = checkId(id as string, provider as Service);
+    const data = await checkId(id as string, provider as Service);
     if (!data) {
       return res.status(404).json({
         message: "Not found",

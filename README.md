@@ -1,6 +1,15 @@
 # Kemono API
 
-Public API to search or check gallery page on `kemono.party` / `coomer.party`.
+Public API to search or check creators page on `kemono.su` / `coomer.su`.
+
+UPDATE NOVEMBER 2023:
+So Kemono provided their own API, you can check it here: `https://kemono.su/api/schema` / `https://coomer.su/api/schema`.
+But the creators data are the txt JSON file, and there is no search or pagination.
+If you **want to search or check creators**, you can use this API.
+But if you want to check the posts and other things, you can use their API.
+I also added scripts to update the creators data from their API, so it would be up to date.
+
+tldr: This API is for searching creators only, not for checking posts.
 
 ## Available Endpoints
 
@@ -65,6 +74,13 @@ interface ResponseOK {
   message: string; // Either OK or error message
   timestamp: number; // Date number from Date.now()
   data: Creator[];
+  pagination: {
+    currentPage: number,
+    itemsPerPage: number,
+    totalPages: number,
+    totalItems: number,
+    isNextPage: boolean,
+    isPrevPage: boolean;
 }
 ```
 

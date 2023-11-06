@@ -1,11 +1,21 @@
-import { Creator, ServiceEnum, ServiceCoomer } from "@/types/data";
-import data from "./data/coomer.json";
+import { Creator, ServiceCoomer } from "@/types/data";
+// import data from "static/coomer.json";
+import { readFile } from "fs/promises";
+import path from "path";
 
-export function getAll(
+export async function getAll(
   query: string = "",
   page: number = 1,
   itemsPerPage: number = 10
-): Creator[] {
+): Promise<{
+  data: Creator[];
+  length: number;
+}> {
+  const staticPath = path.join(process.cwd(), "static");
+  const data = JSON.parse(
+    await readFile(path.join(staticPath, "kemono.json"), "utf-8")
+  );
+
   const dataStart = (page - 1) * itemsPerPage;
   const dataEnd = dataStart + itemsPerPage;
   let filterData: Creator[] = (data as Creator[]).sort(
@@ -27,15 +37,23 @@ export function getAll(
     });
   }
 
-  return filterData.slice(dataStart, dataEnd);
+  return { data: filterData.slice(dataStart, dataEnd), length: dataLength };
 }
 
-export function getByService(
+export async function getByService(
   service: ServiceCoomer,
   query: string = "",
   page: number = 1,
   itemsPerPage: number = 10
-): Creator[] {
+): Promise<{
+  data: Creator[];
+  length: number;
+}> {
+  const staticPath = path.join(process.cwd(), "static");
+  const data = JSON.parse(
+    await readFile(path.join(staticPath, "kemono.json"), "utf-8")
+  );
+
   const dataStart = (page - 1) * itemsPerPage;
   const dataEnd = dataStart + itemsPerPage;
   let filterData: Creator[] = (data as Creator[])
@@ -59,10 +77,18 @@ export function getByService(
     });
   }
 
-  return filterData.slice(dataStart, dataEnd);
+  return { data: filterData.slice(dataStart, dataEnd), length: dataLength };
 }
 
-export function getById(id: string, service: ServiceCoomer): Creator | null {
+export async function getById(
+  id: string,
+  service: ServiceCoomer
+): Promise<Creator | null> {
+  const staticPath = path.join(process.cwd(), "static");
+  const data = JSON.parse(
+    await readFile(path.join(staticPath, "kemono.json"), "utf-8")
+  );
+
   let filterData: Creator[] = (data as Creator[]).filter(
     (creator) => creator.service === service && creator.id === id
   );

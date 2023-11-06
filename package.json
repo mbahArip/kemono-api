@@ -2,16 +2,15 @@
   "name": "kemono-api",
   "version": "1.0.0",
   "description": "Kemono creators API",
-  "main": "./dist/main.ts",
+  "main": "./build/main.ts",
   "repository": "https://github.com/mbahArip/kemono-api",
   "author": "mbaharip",
   "license": "MIT",
-  "private": false,
   "scripts": {
     "build": "tsc",
-    "start": "nodemon -q dist/main.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/main.js\"",
-    "lint": "eslint ./src --ext .ts"
+    "start": "ts-node src/main.ts",
+    "dev": "nodemon src/main.ts",
+    "lint": "eslint src --ext .ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -28,6 +27,7 @@
     "eslint": "^8.43.0",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.8",
+    "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   }
 }
