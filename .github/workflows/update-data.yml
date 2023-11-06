@@ -1,6 +1,8 @@
 name: Update Data
 
 on:
+  schedule:
+    - cron: "0 0 * * *" # Every day at midnight UTC
   push:
     branches:
       - master
