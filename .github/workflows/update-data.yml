@@ -2,7 +2,7 @@ name: Update Data
 
 on:
   schedule:
-    - cron: "0 0 * * *" # Every day at midnight UTC
+    - cron: "0 0 * * 0" # Every sunday at midnight UTC
   push:
     branches:
       - main
