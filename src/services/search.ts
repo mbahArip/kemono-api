@@ -16,14 +16,14 @@ export async function search(id: string): Promise<{
     await readFile(path.join(staticPath, "kemono.json"), "utf-8")
   );
 
-  const kemono = (kemonoData as Creator[]).filter(
+  const kemono:Creator[] = (kemonoData as Creator[]).filter(
     (data) =>
       data.id === id || data.name.toLowerCase().includes(id.toLowerCase())
-  );
-  const coomer = (coomerData as Creator[]).filter(
+  ).map((item) => ({...item, url: `https://coomer.su/${item.service}/user/${item.id}`}));
+  const coomer:Creator[] = (coomerData as Creator[]).filter(
     (data) =>
       data.id === id || data.name.toLowerCase().includes(id.toLowerCase())
-  );
+  ).map((item) => ({...item, url: `https://coomer.su/${item.service}/user/${item.id}`}));
 
   let data: Creator[] = [...kemono, ...coomer];
 
@@ -44,10 +44,10 @@ export async function checkId(
 
   const kemono = (kemonoData as Creator[]).filter(
     (data) => (data.id === id || data.name === id) && data.service === provider
-  );
+  ).map((item) => ({...item, url: `https://coomer.su/${item.service}/user/${item.id}`}));
   const coomer = (coomerData as Creator[]).filter(
     (data) => (data.id === id || data.name === id) && data.service === provider
-  );
+  ).map((item) => ({...item, url: `https://coomer.su/${item.service}/user/${item.id}`}));
 
   let data: Creator[] = [...kemono, ...coomer];
 

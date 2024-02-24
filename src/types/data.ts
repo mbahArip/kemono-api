@@ -5,6 +5,7 @@ export interface Creator {
   name: string;
   service: Service;
   updated: number;
+  url?: string;
 }
 
 export type ServiceKemono =
