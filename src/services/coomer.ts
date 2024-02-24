@@ -13,7 +13,7 @@ export async function getAll(
 }> {
   const staticPath = path.join(process.cwd(), "static");
   const data = JSON.parse(
-    await readFile(path.join(staticPath, "kemono.json"), "utf-8")
+    await readFile(path.join(staticPath, "coomer.json"), "utf-8")
   );
 
   const dataStart = (page - 1) * itemsPerPage;
@@ -51,7 +51,7 @@ export async function getByService(
 }> {
   const staticPath = path.join(process.cwd(), "static");
   const data = JSON.parse(
-    await readFile(path.join(staticPath, "kemono.json"), "utf-8")
+    await readFile(path.join(staticPath, "coomer.json"), "utf-8")
   );
 
   const dataStart = (page - 1) * itemsPerPage;
@@ -86,7 +86,7 @@ export async function getById(
 ): Promise<Creator | null> {
   const staticPath = path.join(process.cwd(), "static");
   const data = JSON.parse(
-    await readFile(path.join(staticPath, "kemono.json"), "utf-8")
+    await readFile(path.join(staticPath, "coomer.json"), "utf-8")
   );
 
   let filterData: Creator[] = (data as Creator[]).filter(
