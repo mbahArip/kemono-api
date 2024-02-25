@@ -44,7 +44,7 @@ export async function checkId(
 
   const kemono = (kemonoData as Creator[]).filter(
     (data) => (data.id === id || data.name.toLowerCase() === id.toLowerCase()) && data.service === provider
-  ).map((item) => ({...item, url: `https://coomer.su/${item.service}/user/${item.id}`}));
+  ).map((item) => ({...item, url: `https://kemono.su/${item.service}/user/${item.id}`}));
   const coomer = (coomerData as Creator[]).filter(
     (data) => (data.id === id || data.name.toLowerCase() === id.toLowerCase()) && data.service === provider
   ).map((item) => ({...item, url: `https://coomer.su/${item.service}/user/${item.id}`}));
