@@ -1,9 +1,9 @@
 # Kemono API
 
-Public API to search or check creators page on `kemono.su` / `coomer.su`.
+Public API to search or check creators page on `kemono.su`.
 
 UPDATE NOVEMBER 2023:
-So Kemono provided their own API, you can check it here: `https://kemono.su/api/schema` / `https://coomer.su/api/schema`.
+So Kemono provided their own API, you can check it here: `https://kemono.su/api/schema`.
 But the creators data are the txt JSON file, and there is no search or pagination.
 If you **want to search or check creators**, you can use this API.
 But if you want to check the posts and other things, you can use their API.
@@ -18,9 +18,6 @@ tldr: This API is for searching creators only, not for checking posts.
 |  GET   | `/kemono`              |     ✅     |
 |  GET   | `/kemono/:service`     |     ✅     |
 |  GET   | `/kemono/:service/:id` |            |
-|  GET   | `/coomer`              |     ✅     |
-|  GET   | `/coomer/:service`     |     ✅     |
-|  GET   | `/coomer/:service/:id` |            |
 |  GET   | `/search/:id`          |            |
 
 ### Pagination Query
@@ -46,13 +43,6 @@ tldr: This API is for searching creators only, not for checking posts.
 | dlsite        | DLsite        |
 | gumroad       | Gumroad       |
 | subscribestar | SubscribeStar |
-
-### Coomer
-
-| Key      | Name     |
-| :------- | :------- |
-| onlyfans | OnlyFans |
-| fansly   | Fansly   |
 
 ## Return Data
 
@@ -115,7 +105,7 @@ const data = await axios.get<Creator[]>(
 
 #### Service Search
 
-Only search from kemono / coomer creators.  
+Only search from kemono creators.  
 If you search it via `/kemono/patreon?keyword=vici`, it only search from patreon service.
 
 ```ts
@@ -126,7 +116,7 @@ const data = await axios.get<Creator[]>(
 
 #### Global search
 
-It search keyword from kemono & coomer creators.
+It search keyword from kemono creators.
 
 ```ts
 const data = await axios.get<Creator[]>(
