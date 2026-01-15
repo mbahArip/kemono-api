@@ -91,7 +91,7 @@ export async function getById(
 
   let filterData: Creator[] = (data as Creator[]).filter(
     (creator) => creator.service === service && creator.id === id
-  ).map((item) => ({...item, url: `https://coomer.su/${item.service}/user/${item.id}`}));
+  ).map((item) => ({...item, url: `https://coomer.st/${item.service}/user/${item.id}`}));
 
   return filterData[0];
 }

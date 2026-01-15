@@ -4,8 +4,8 @@ const fs = require("fs");
 const timeStart = Date.now();
 async function main() {
   console.log("Fetching data...");
-  const endpointKemono = `https://kemono.su/api/v1/creators`;
-  const endpointCoomer = `https://coomer.su/api/v1/creators`;
+  const endpointKemono = `https://kemono.cr/api/v1/creators`;
+  const endpointCoomer = `https://coomer.st/api/v1/creators`;
 
   const creatorsKemono = await fetch(endpointKemono)
     .then((res) => res.text())

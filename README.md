@@ -1,9 +1,9 @@
 # Kemono API
 
-Public API to search or check creators page on `kemono.su`.
+Public API to search or check creators page on `kemono.cr`.
 
 UPDATE NOVEMBER 2023:
-So Kemono provided their own API, you can check it here: `https://kemono.su/api/schema`.
+So Kemono provided their own API, you can check it here: `https://kemono.cr/api/schema`.
 But the creators data are the txt JSON file, and there is no search or pagination.
 If you **want to search or check creators**, you can use this API.
 But if you want to check the posts and other things, you can use their API.
